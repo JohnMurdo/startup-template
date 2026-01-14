@@ -56,10 +56,10 @@ I am going to use the required technologies in the following ways.
 
 - **HTML** - Structure the top and bottom nav bars. Make the various pages.
 - **CSS** - Style the icons for the nav bars. Make consistent type font.
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **React** - Commenting on posts and Scriptures. Navigating through various Bibles.
+- **Service** - Login, retrieving comments and posts, retrieving streaks.
+- **DB/Login** - Stores users, comments, posts, and user information, in database. Can only take notes and comments with an account.
+- **WebSocket** - As users comment and publically post their insights, they are displayed on the FRIENDS page.
 
 ## 🚀 AWS deliverable
 
