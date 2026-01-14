@@ -46,7 +46,7 @@ sequenceDiagram
 
 ### Key features
 
-- READ - Be able to read from various Bible translations and Come, Follow Me content.
+- READ - Be able to read from various Bible translations and updated Come, Follow Me content.
 - NOTE - Be able to take notes and make them private or public.
 - FRIENDS - Follow freinds and keep up with their streaks and insights. Be able to comment on their public notes.
 
@@ -54,8 +54,8 @@ sequenceDiagram
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
+- **HTML** - Structure the top and bottom nav bars. Make the various pages.
+- **CSS** - Style the icons for the nav bars. Make consistent type font.
 - **React** - Description here
 - **Service** - Description here
 - **DB/Login** - Description here
