@@ -37,7 +37,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 sequenceDiagram
     actor You
     actor Website
-    You->>Website: Replace this with your design
+    actor Friend
+    You->>Website: Your reading progress
+    Friend->>Website: Their reading progress
+    You->>Website: Request Friend's progress
+    Website->>You: View Friend's progress
 ```
 
 ### Key features
