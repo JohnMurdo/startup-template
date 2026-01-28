@@ -68,7 +68,10 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Server deployed and accessible with custom domain name** - [My server link](http://scripfest).
 
 ## 🚀 HTML deliverable
-
+<!-- [!NOTE]
+git clone https://github.com/webprogramming260/simon-html.git
+./deployFiles.sh -k <yourpemkey> -h <yourdomain> -s simon
+-->
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
 - [ ] **HTML pages** - I did not complete this part of the deliverable.
