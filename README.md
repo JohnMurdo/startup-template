@@ -68,7 +68,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Server deployed and accessible with custom domain name** - [My server link](http://scripfest).
 
 ## 🚀 HTML deliverable
-
+<!--->
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
 - [ ] **HTML pages** - I did not complete this part of the deliverable.
