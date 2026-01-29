@@ -74,15 +74,15 @@ git clone https://github.com/webprogramming260/simon-html.git
 -->
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **HTML pages** - I made index, read, note, and friends html
+- [x] **Proper HTML element usage** - I used body, nav, main, header, footer, img, and many other elements properly
+- [x] **Links** - There are links to all the pages in the top nav, and a link to github in the bottom nav
+- [x] **Text** - I wrote text for the h1 h2 h3 h4 elements and for various others
+- [x] **3rd party API placeholder** - The bible text in read.html will be used from a bible online
+- [x] **Images** - I added images and svgs for the various pages
+- [x] **Login placeholder** - There is a login page that asks for a user to login
+- [x] **DB data placeholder** - The comments will be saved to the database along with your notes
+- [x] **WebSocket placeholder** - displays your frineds comments and public notes in the feed section on friends.html
 
 ## 🚀 CSS deliverable
 
