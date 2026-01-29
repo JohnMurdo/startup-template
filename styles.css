@@ -33,3 +33,7 @@ header > nav {
 footer {
     background-color: aquamarine;
 }
+svg {
+    height: 100px;
+    width: 100px;
+}
