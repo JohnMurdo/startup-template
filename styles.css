@@ -7,7 +7,7 @@
 
 body {
     background-color: rgb(47, 188, 210);
-    color: rgb(51, 51, 51);
+    color: rgb(28, 28, 28);
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
     font-weight: 200;
@@ -28,11 +28,17 @@ header > img {
 header > nav {
     background-color:aliceblue;
     display: flex;
+    padding: 1%;
+    margin:1%;
 }
 
 footer {
     background-color: aquamarine;
+    padding: 1%;
+    display: flex;
+    justify-content: center;
 }
+
 svg {
     height: 100px;
     width: 100px;
