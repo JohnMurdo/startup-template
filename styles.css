@@ -1,66 +1,72 @@
 /* ---------- Light Mode ---------- */
 :root {
-  --bg: #BDDBD5;
-  --text: #21375E;
+    --bg: #BDDBD5;
+    --text: #21375E;
 
-  --header-bg: #4A7193;
-  --nav-bg: #A36C48;
-  --footer-bg: #4A7193;
+    --header-bg: #4A7193;
+    --nav-bg: #A36C48;
+    --footer-bg: #4A7193;
 
-  --accent: #EFD092;
+    --accent: #EFD092;
 
   /* Text color for header/nav/footer */
-  --section-text: #21375E;
+    --section-text: #21375E;
 }
 
 /* ---------- Dark Mode ---------- */
 [data-theme="dark"] {
-  --bg: #1A2538;
-  --text: #D7E7E4;
+    --bg: #1A2538;
+    --text: #D7E7E4;
 
-  --header-bg: #2F4A63;
-  --nav-bg: #7A4F34;
-  --footer-bg: #2F4A63;
+    --header-bg: #2F4A63;
+    --nav-bg: #7A4F34;
+    --footer-bg: #2F4A63;
 
-  --accent: #EFD092;
+    --accent: #EFD092;
 
-  --section-text: #D7E7E4;
+    --section-text: #D7E7E4;
 }
 
 /* ---------- Typography ---------- */
 .nunito-font,
 body {
-  font-family: "Nunito", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 200;
-  font-style: normal;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
 }
 
 /* ---------- Body ---------- */
 body {
-  background: var(--bg);
-  color: var(--text);
+    background: var(--bg);
+    color: var(--text);
 }
 
 /* ---------- Header ---------- */
 header {
-  background: var(--header-bg);
-  display: flex;
-  justify-content: space-between;
-  color: var(--section-text);
+    background: var(--header-bg);
+    display: flex;
+    justify-content: space-between;
+    color: var(--section-text);
 }
 
 header > img {
-  width: 100px;
-  height: 100px;
+    width: 100px;
+    height: 100px;
 }
 
 header > nav {
-  background: var(--nav-bg);
-  display: flex;
-  padding: 1%;
-  margin: 1%;
-  color: var(--section-text);
+    background: var(--nav-bg);
+    display: flex;
+    padding: 1%;
+    margin: 1%;
+    color: var(--section-text);
+}
+
+/* ---------- Main ---------- */
+main {
+    background: var(--bg);
+    color: var(--text);
 }
 
 /* ---------- Footer ---------- */
@@ -77,19 +83,26 @@ nav h2,
 nav ul,
 nav li,
 nav a {
-  color: var(--section-text);
+    color: var(--section-text);
 }
 
 nav a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 nav a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
+
+/* ---------- Button ---------- */
+button {
+  background: var(--accent);
+  color: var(--text);
+}
+
 
 /* ---------- SVG ---------- */
 svg {
-  height: 100px;
-  width: 100px;
+    height: 100px;
+    width: 100px;
 }
