@@ -1,3 +1,48 @@
+:root {
+  /* --bg: white; */
+  /* --text: black;
+
+  --bg: #A36C48;
+  --text: #21375E;
+  --section-text: #4A7193;
+  --header-bg: #EFD092;
+  --nav-bg: #BDDBD5;
+  --footer-bg: #EFD092; */
+
+  --bg: #BDDBD5;
+  --text: #21375E;
+
+  --header-bg: #4A7193;
+  --nav-bg: #A36C48;
+  --footer-bg: #4A7193;
+
+  --accent: #EFD092;
+
+
+}
+
+[data-theme="dark"] {
+  /* --bg: #121212; */
+  /* --text: #e5e5e5; */
+
+  /* --bg: #121212;
+  --text: #ffffff;
+  --section-text: #ffffff;
+  --header-bg: #1e1e1e;
+  --nav-bg: #2a2a2a;
+  --footer-bg: #1e1e1e; */
+
+  --bg: #1A2538;
+  --text: #D7E7E4;
+
+  --header-bg: #2F4A63;
+  --nav-bg: #7A4F34;
+  --footer-bg: #2F4A63;
+
+  --accent: #EFD092;
+}
+
+
 .nunito-font {
   font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
@@ -6,18 +51,29 @@
 }
 
 body {
-    background-color: rgb(47, 188, 210);
-    color: rgb(28, 28, 28);
+    /* background-color: rgb(47, 188, 210); */
+    /* color: rgb(28, 28, 28); */
+    background-color: #A36C48;
+    background: var(--bg);
+    color: var(--text);
+
+
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
     font-weight: 200;
     font-style: normal;
+
+    /* background: var(--bg);
+    color: var(--text); */
+
 }
 
 header {
-    background-color: aquamarine;
+    /* background-color: aquamarine; */
+    background: var(--header-bg);
+
     display: flex;
-    justify-content: center;
+    justify-content:space-between;
 }
 
 header > img {
@@ -26,18 +82,45 @@ header > img {
 }
 
 header > nav {
-    background-color:aliceblue;
+    /* background-color:aliceblue; */
+    background: var(--nav-bg);
+
     display: flex;
     padding: 1%;
     margin:1%;
 }
 
 footer {
-    background-color: aquamarine;
+    /* background-color: aquamarine; */
+    background: var(--footer-bg);
+
     padding: 1%;
     display: flex;
     justify-content: center;
 }
+
+header,
+header nav,
+footer {
+  color: var(--section-text);
+}
+
+nav h2,
+nav ul,
+nav li,
+nav a {
+  color: var(--section-text);
+}
+
+nav a {
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+
 
 svg {
     height: 100px;
