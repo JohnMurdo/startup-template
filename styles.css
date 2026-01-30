@@ -26,7 +26,9 @@
 
     --section-text: #D7E7E4;
 
-    --button-text: #2F4A63:
+    --button-text: #2F4A63;
+
+    --svg-stroke: #1A2538;
 }
 
 /* ---------- Typography ---------- */
@@ -103,7 +105,7 @@ button {
 }
 
 form,
-input,
+/* input, */
 button,
 label {
   background: var(--bg);
@@ -111,10 +113,18 @@ label {
   border: 1px solid var(--text);
 }
 
-
-
 /* ---------- SVG ---------- */
 svg {
+    stroke: var(--svg-stroke);
+    fill: var(--svg-stroke);
     height: 100px;
     width: 100px;
+}
+
+#nav_book, #nav_lightbulb {
+    stroke: none;
+}
+
+#nav_people {
+    fill: none;
 }

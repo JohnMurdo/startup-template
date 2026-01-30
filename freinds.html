@@ -13,7 +13,7 @@
         <header>
             <?xml version="1.0" encoding="utf-8"?>
             <!-- License: PD. Made by theforgesmith: https://icons.theforgesmith.com -->
-            <svg width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000000" fill="none">
+            <svg id="nav_people" width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" fill="none">
                 <circle cx="22.83" cy="22.57" r="7.51"/>
                 <path d="M38,49.94a15.2,15.2,0,0,0-15.21-15.2h0a15.2,15.2,0,0,0-15.2,15.2Z"/>
                 <circle cx="44.13" cy="27.22" r="6.05"/>
@@ -60,6 +60,13 @@
             </div>
         </main>
         <footer>
+            <button id="toggle">Toggle Dark Mode</button>
+            <script>
+                const html = document.documentElement;
+                document.getElementById("toggle").onclick = () => {
+                    html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
+                };
+            </script>
             <nav>
                 <a href="read.html">
                     <button>Search</button>
