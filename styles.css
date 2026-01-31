@@ -82,6 +82,10 @@ footer {
   color: var(--section-text);
 }
 
+footer a {
+    
+}
+
 /* ---------- Navigation Text ---------- */
 nav h2,
 nav ul,
