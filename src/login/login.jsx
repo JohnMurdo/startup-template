@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 
 export function Login() {
   return (
@@ -13,16 +14,16 @@ export function Login() {
                 <h2>Username</h2>
                 <ul>
                     <li>
-                        <a href="index.html">Login</a>
+                        <NavLink to="../login">Login</NavLink>
                     </li>
                     <li>
-                        <a href="read.html">Read</a>
+                        <NavLink to="../read">Read</NavLink>
                     </li>
                     <li>
-                        <a href="note.html">Note</a>
+                        <NavLink to="../note">Note</NavLink>
                     </li>
                     <li>
-                        <a href="friends.html">Friends</a>
+                        <NavLink to="../friends">Friends</NavLink>
                     </li>
                 </ul>
             </nav>

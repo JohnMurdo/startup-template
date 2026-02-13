@@ -18,16 +18,16 @@ export function Read() {
                 <h2>Username</h2>
                 <ul>
                     <li>
-                        <NavLink to="index">Login</NavLink>
+                        <NavLink to="../index">Login</NavLink>
                     </li>
                     <li>
-                        <NavLink to="read">Read</NavLink>
+                        <NavLink to="../read">Read</NavLink>
                     </li>
                     <li>
-                        <NavLink to="note">Note</NavLink>
+                        <NavLink to="../note">Note</NavLink>
                     </li>
                     <li>
-                        <NavLink to="friends">Friends</NavLink>
+                        <NavLink to="../friends">Friends</NavLink>
                     </li>
                 </ul>
             </nav>

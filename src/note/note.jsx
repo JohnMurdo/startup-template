@@ -1,9 +1,56 @@
 import React, { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 
 export function Note() {
   return (
     <main className="container-fluid bg-secondary text-center">
-      <div>login displayed here</div>
+      <div>
+        <header>
+            {/* <?xml version="1.0" encoding="utf-8"?> */}
+            {/* <!-- License: MIT. Made by framework7io: https://github.com/framework7io/framework7-icons --> */}
+            <svg id="nav_lightbulb" width="800px" height="800px" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 19.5039 43.1523 L 36.4726 43.1523 C 37.2695 43.1523 37.7617 42.6601 37.7617 41.8633 L 37.7617 38.1133 C 37.7617 32.4414 46.0117 28.7852 46.0117 18.6601 C 46.0117 7.9961 38.7930 .8711 27.9883 .8711 C 17.1836 .8711 9.9883 7.9961 9.9883 18.6601 C 9.9883 28.7852 18.2148 32.4414 18.2148 38.1133 L 18.2148 41.8633 C 18.2148 42.6601 18.7304 43.1523 19.5039 43.1523 Z M 21.7070 38.1601 C 21.7070 31.2695 13.5273 27.5898 13.5273 18.6836 C 13.5273 10.1054 19.3164 4.4101 27.9883 4.4101 C 36.6601 4.4101 42.4726 10.1054 42.4726 18.6836 C 42.4726 27.5898 34.2695 31.2695 34.2695 38.1601 L 34.2695 39.6133 L 21.7070 39.6133 Z M 20.3711 49.4805 L 35.6055 49.4805 C 36.8008 49.4805 37.7617 48.4961 37.7617 47.2773 C 37.7617 46.0586 36.8008 45.0742 35.6055 45.0742 L 20.3711 45.0742 C 19.1758 45.0742 18.2148 46.0586 18.2148 47.2773 C 18.2148 48.4961 19.1758 49.4805 20.3711 49.4805 Z M 27.9883 55.1289 C 31.2226 55.1289 33.4961 53.6523 33.7304 51.3789 L 22.2461 51.3789 C 22.4570 53.6523 24.7304 55.1289 27.9883 55.1289 Z"/>
+            </svg>
+            <h1>
+                Note
+            </h1>
+            <nav>
+                <h2>Username</h2>
+                <ul>
+                    <li>
+                        <NavLink to="../login">Login</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="../read">Read</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="../note">Note</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="../friends">Friends</NavLink>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <textarea>New Note...</textarea>
+            <button>Save Note</button>
+        </main>
+        <footer>
+            {/* <!-- Button by Copilot --> */}
+            <button id="toggle">Toggle Dark Mode</button>
+            <nav>
+                <a href="friends.html">
+                    <button>Share</button>
+                </a>
+                <a href="read.html">
+                    <button>Link</button>
+                </a>
+                <button>Trash</button>
+            </nav>
+            <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
+        </footer>
+      </div>
     </main>
   );
 }
