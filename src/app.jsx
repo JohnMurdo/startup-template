@@ -22,7 +22,7 @@ export default function App() {
 
   return (
   <BrowserRouter>
-  <div className="app bg-dark text-light">App will display here</div>;
+  <div className="app bg-dark text-light"></div>
     <Routes>
       <Route path='/login' element={<Login />} exact />
       <Route path='/read' element={<Read />} />
