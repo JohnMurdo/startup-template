@@ -1,18 +1,6 @@
 import React, { useEffect } from 'react';
 
 export function Login() {
-
-    useEffect(() => {
-        const html = document.documentElement;
-        const toggle = document.getElementById("toggle");
-
-        if (toggle) {
-            toggle.onclick = () => {
-                html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
-            };
-        }
-    }, []);
-
   return (
     <main className="container-fluid bg-secondary text-center">
       <div>

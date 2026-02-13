@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
@@ -8,6 +8,18 @@ import { Note } from './note/note.jsx';
 import { Friends } from './friends/friends.jsx';
 
 export default function App() {
+
+    useEffect(() => {
+        const html = document.documentElement;
+        const toggle = document.getElementById("toggle");
+
+        if (toggle) {
+            toggle.onclick = () => {
+                html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
+            };
+        }
+    }, []);
+
   return (
   <BrowserRouter>
   <div className="app bg-dark text-light">App will display here</div>;

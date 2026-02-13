@@ -1,9 +1,86 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 
 export function Read() {
   return (
     <main className="container-fluid bg-secondary text-center">
-      <div>login displayed here</div>
+      <div>
+        <header>
+            {/* <?xml version="1.0" encoding="utf-8"?> */}
+            {/* <!-- License: CC Attribution. Made by tetrisly: https://tetrisly.gumroad.com/l/freeicons --> */}
+            <svg id="nav_book" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M9.5,4.49758215 L12,5.53107667 L14.5,4.49758215 C16.1048534,3.83413928 17.8951466,3.83413928 19.5,4.49758215 L21.3713907,5.27121095 C21.7510491,5.4281609 22,5.80818588 22,6.23078653 L22,18.4734945 C22,19.0442778 21.5522847,19.506989 21,19.506989 C20.8727806,19.506989 20.7467296,19.4819008 20.6286093,19.4330701 L19.5,18.9665055 C17.8951466,18.3030626 16.1048534,18.3030626 14.5,18.9665055 L12,20 L9.5,18.9665055 C7.89514664,18.3030626 6.10485336,18.3030626 4.5,18.9665055 L3.37139068,19.4330701 C2.85860716,19.6450537 2.27663672,19.3872837 2.07152331,18.8573248 C2.0242752,18.7352481 2,18.6049751 2,18.4734945 L2,6.23078653 C2,5.80818588 2.24895094,5.4281609 2.62860932,5.27121095 L4.5,4.49758215 C6.10485336,3.83413928 7.89514664,3.83413928 9.5,4.49758215 Z M5.26407973,6.34587384 L4,6.86844163 L4,17.0141076 C6.02542236,16.2540083 8.25752963,16.2887104 10.2640797,17.1182138 L11,17.422 L11,7.282 L8.73592027,6.34587384 C7.62037223,5.88470872 6.37962777,5.88470872 5.26407973,6.34587384 Z M15.2640797,6.34587384 L13,7.281 L13,17.422 L13.7359203,17.1182138 C15.7424704,16.2887104 17.9745777,16.2540083 20,17.0141077 L20,6.86844163 L18.7359203,6.34587384 C17.6203722,5.88470872 16.3796278,5.88470872 15.2640797,6.34587384 Z"/>
+            </svg>
+            <h1>
+                Read
+            </h1>
+            <nav>
+                <h2>Username</h2>
+                <ul>
+                    <li>
+                        <NavLink to="index">Login</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="read">Read</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="note">Note</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="friends">Friends</NavLink>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <p>
+                1 In the beginning God created the heaven and the earth.
+                2 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.
+                3 And God said, Let there be light: and there was light.
+                4 And God saw the light, that it was good: and God divided the light from the darkness.
+                5 And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.
+                6 ¶ And God said, Let there be a firmament in the midst of the waters, and let it divide the waters from the waters.
+                7 And God made the firmament, and divided the waters which were under the firmament from the waters which were above the firmament: and it was so.
+                8 And God called the firmament Heaven. And the evening and the morning were the second day.
+                9 ¶ And God said, Let the waters under the heaven be gathered together unto one place, and let the dry land appear: and it was so.
+                10 And God called the dry land Earth; and the gathering together of the waters called he Seas: and God saw that it was good.
+                11 And God said, Let the earth bring forth grass, the herb yielding seed, and the fruit tree yielding fruit after his kind, whose seed is in itself, upon the earth: and it was so.
+                12 And the earth brought forth grass, and herb yielding seed after his kind, and the tree yielding fruit, whose seed was in itself, after his kind: and God saw that it was good.
+                13 And the evening and the morning were the third day.
+                14 ¶ And God said, Let there be lights in the firmament of the heaven to divide the day from the night; and let them be for signs, and for seasons, and for days, and years:
+                15 And let them be for lights in the firmament of the heaven to give light upon the earth: and it was so.
+                16 And God made two great lights; the greater light to rule the day, and the lesser light to rule the night: he made the stars also.
+                17 And God set them in the firmament of the heaven to give light upon the earth,
+                18 And to rule over the day and over the night, and to divide the light from the darkness: and God saw that it was good.
+                19 And the evening and the morning were the fourth day.
+                20 And God said, Let the waters bring forth abundantly the moving creature that hath life, and fowl that may fly above the earth in the open firmament of heaven.
+                21 And God created great whales, and every living creature that moveth, which the waters brought forth abundantly, after their kind, and every winged fowl after his kind: and God saw that it was good.
+                22 And God blessed them, saying, Be fruitful, and multiply, and fill the waters in the seas, and let fowl multiply in the earth.
+                23 And the evening and the morning were the fifth day.
+                24 ¶ And God said, Let the earth bring forth the living creature after his kind, cattle, and creeping thing, and beast of the earth after his kind: and it was so.
+                25 And God made the beast of the earth after his kind, and cattle after their kind, and every thing that creepeth upon the earth after his kind: and God saw that it was good.
+                26 ¶ And God said, Let us make man in our image, after our likeness: and let them have dominion over the fish of the sea, and over the fowl of the air, and over the cattle, and over all the earth, and over every creeping thing that creepeth upon the earth.
+                27 So God created man in his own image, in the image of God created he him; male and female created he them.
+                28 And God blessed them, and God said unto them, Be fruitful, and multiply, and replenish the earth, and subdue it: and have dominion over the fish of the sea, and over the fowl of the air, and over every living thing that moveth upon the earth.
+                29 ¶ And God said, Behold, I have given you every herb bearing seed, which is upon the face of all the earth, and every tree, in the which is the fruit of a tree yielding seed; to you it shall be for meat.
+                30 And to every beast of the earth, and to every fowl of the air, and to every thing that creepeth upon the earth, wherein there is life, I have given every green herb for meat: and it was so.
+                31 And God saw every thing that he had made, and, behold, it was very good. And the evening and the morning were the sixth day.
+            </p>
+        </main>
+        <footer>
+            <button id="toggle">Toggle Dark Mode</button>
+            <nav>
+                <a href="#">
+                    <button>&lt;</button>
+                </a>
+                Genesis 1
+                <a href="#">
+                    <button>&gt;</button>
+                </a>
+            </nav>
+            <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
+        </footer>
+      </div>
     </main>
   );
 }
