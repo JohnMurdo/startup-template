@@ -68,7 +68,7 @@ export function Friends() {
                 </NavLink>
                 <button>Trending</button>
             </nav>
-            <NavLink to="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</NavLink>
+            <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
         </footer>
       </div>
     </main>

@@ -1,6 +1,18 @@
 import React from 'react';
 
 export function Login() {
+
+    useEffect(() => {
+        const html = document.documentElement;
+        const toggle = document.getElementById("toggle");
+
+        if (toggle) {
+            toggle.onclick = () => {
+                html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
+            };
+        }
+    }, []);
+    
   return (
     <main className="container-fluid bg-secondary text-center">
       <div>
@@ -27,25 +39,17 @@ export function Login() {
                 </ul>
             </nav>
         </header>
-        <main>
-            <form action="read.html" method="get">
-                <label>Username:</label>
-                <input type="text" name="username">
+        <form action="read.html" method="get">
+            <label>Username:</label>
+            <input type="text" name="username">
 
-                <label>Password:</label>
-                <input type="password" name="password">
+            <label>Password:</label>
+            <input type="password" name="password">
 
-                <button class="secondary" type="submit">Login</button>
-            </form>
-        </main>
+            <button class="secondary" type="submit">Login</button>
+        </form>
         <footer>
             <button id="toggle">Toggle Dark Mode</button>
-            <script>
-                const html = document.documentElement;
-                document.getElementById("toggle").onclick = () => {
-                    html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
-                };
-            </script>
             <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
         </footer>
       </div>
