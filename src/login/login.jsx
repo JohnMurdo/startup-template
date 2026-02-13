@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export function Login() {
 
@@ -12,7 +12,7 @@ export function Login() {
             };
         }
     }, []);
-    
+
   return (
     <main className="container-fluid bg-secondary text-center">
       <div>
@@ -41,12 +41,12 @@ export function Login() {
         </header>
         <form action="read.html" method="get">
             <label>Username:</label>
-            <input type="text" name="username">
+            <input type="text" name="username"/>
 
             <label>Password:</label>
-            <input type="password" name="password">
+            <input type="password" name="password"/>
 
-            <button class="secondary" type="submit">Login</button>
+            <button className="secondary" type="submit">Login</button>
         </form>
         <footer>
             <button id="toggle">Toggle Dark Mode</button>
