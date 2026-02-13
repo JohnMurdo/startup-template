@@ -18,7 +18,7 @@ export function Read() {
                 <h2>Username</h2>
                 <ul>
                     <li>
-                        <NavLink to="../index">Login</NavLink>
+                        <NavLink to="../login">Login</NavLink>
                     </li>
                     <li>
                         <NavLink to="../read">Read</NavLink>
