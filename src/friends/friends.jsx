@@ -63,12 +63,12 @@ export function Friends() {
                 };
             </script> */}
             <nav>
-                <a href="read.html">
+                <NavLink to="../read">
                     <button>Search</button>
-                </a>
+                </NavLink>
                 <button>Trending</button>
             </nav>
-            <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
+            <NavLink to="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</NavLink>
         </footer>
       </div>
     </main>

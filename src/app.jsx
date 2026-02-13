@@ -12,7 +12,7 @@ export default function App() {
   <BrowserRouter>
   <div className="app bg-dark text-light">App will display here</div>;
     <Routes>
-      <Route path='/' element={<Login />} exact />
+      <Route path='/login' element={<Login />} exact />
       <Route path='/read' element={<Read />} />
       <Route path='/note' element={<Note />} />
       <Route path='/friends' element={<Friends />} />
