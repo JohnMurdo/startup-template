@@ -19,6 +19,11 @@
     --section-text: #21375E;
 }
 
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 /* ---------- Dark Mode ---------- */
 [data-theme="dark"] {
     --bg: #1A2538;
