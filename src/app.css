@@ -89,7 +89,7 @@ footer {
 }
 
 footer a {
-    
+    color: var(--bg);
 }
 
 /* ---------- Navigation Text ---------- */
