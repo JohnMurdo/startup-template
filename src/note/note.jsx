@@ -40,12 +40,12 @@ export function Note() {
             {/* <!-- Button by Copilot --> */}
             <button id="toggle">Toggle Dark Mode</button>
             <nav>
-                <a href="friends.html">
+                <NavLink to="../friends"   >
                     <button>Share</button>
-                </a>
-                <a href="read.html">
+                </NavLink>
+                <NavLink to="../read">
                     <button>Link</button>
-                </a>
+                </NavLink>
                 <button>Trash</button>
             </nav>
             <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
