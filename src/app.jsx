@@ -5,7 +5,7 @@ import { BrowserRouter, NavLink, Route, Routes} from 'react-router-dom';
 import { Login } from './login/login.jsx';
 import { Read } from './read/read.jsx';
 import { Note } from './note/note.jsx';
-import { AuthState } from './login/authState.jsx';
+import { AuthState } from './login/authState.js';
 import { Friends } from './friends/friends.jsx';
 
 export default function App() {

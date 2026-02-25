@@ -21,7 +21,7 @@ export function Friends() {
                 <h2>Username</h2>
                 <ul>
                     <li>
-                        <NavLink to="../login">Login</NavLink>
+                        <NavLink to="../">Login</NavLink>
                     </li>
                     <li>
                         <NavLink to="../read">Read</NavLink>
