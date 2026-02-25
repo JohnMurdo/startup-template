@@ -5,7 +5,8 @@ import { Authenticated } from './authenticated';
 import { AuthState } from './authState';
 
 
-export function Login() {
+export function Login(props) {
+  const { userName, authState, onAuthChange } = props;
   return (
     <main className="container-fluid bg-secondary text-center">
       <div>
