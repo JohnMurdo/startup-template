@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Unauthenticated } from './unauthenticated';
+import { Authenticated } from './authenticated';
+import { AuthState } from './authState';
+
 
 export function Login() {
   return (
@@ -14,7 +18,7 @@ export function Login() {
                 <h2>Username</h2>
                 <ul>
                     <li>
-                        <NavLink to="../login">Login</NavLink>
+                        <NavLink to="../">Login</NavLink>
                     </li>
                     <li>
                         <NavLink to="../read">Read</NavLink>
@@ -28,7 +32,7 @@ export function Login() {
                 </ul>
             </nav>
         </header>
-        <form action="read.html" method="get">
+        {/* <form action="read.html" method="get">
             <label>Username:</label>
             <input type="text" name="username"/>
 
@@ -36,7 +40,21 @@ export function Login() {
             <input type="password" name="password"/>
 
             <button className="secondary" type="submit">Login</button>
-        </form>
+        </form> */}
+        <div>
+        {authState !== AuthState.Unknown && <h1>Welcome to Simon</h1>}
+        {authState === AuthState.Authenticated && (
+          <Authenticated userName={userName} onLogout={() => onAuthChange(userName, AuthState.Unauthenticated)} />
+        )}
+        {authState === AuthState.Unauthenticated && (
+          <Unauthenticated
+            userName={userName}
+            onLogin={(loginUserName) => {
+              onAuthChange(loginUserName, AuthState.Authenticated);
+            }}
+          />
+        )}
+      </div>
         <footer>
             <button id="toggle">Toggle Dark Mode</button>
             <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
