@@ -59,6 +59,7 @@ export function Read() {
                 </a>
             </nav>
             <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
+            <a href="https://api.bible/">[Bible translation name] © 2026</a>
         </footer>
       </div>
     </main>

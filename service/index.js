@@ -198,78 +198,119 @@ function setAuthCookie(res, authToken) {
   });
 }
 
-async function fetchBibleApi(endpoint, query = {}) {
-  const apiKey = config.bibleApiKey;
-  const bibleId = config.bibleId || 'de4e12af7f28f599-01';
-  if (!apiKey) {
-    throw { status: 500, message: 'Missing Bible API key. Set bibleApiKey in dbConfig.json.' };
-  }
+const BOOK_ID_MAP = {
+  'genesis': 'genesis',
+  'exodus': 'exodus',
+  'leviticus': 'leviticus',
+  'numbers': 'numbers',
+  'deuteronomy': 'deuteronomy',
+  'joshua': 'joshua',
+  'judges': 'judges',
+  'ruth': 'ruth',
+  '1 samuel': '1samuel',
+  '1samuel': '1samuel',
+  '2 samuel': '2samuel',
+  '2samuel': '2samuel',
+  '1 kings': '1kings',
+  '1kings': '1kings',
+  '2 kings': '2kings',
+  '2kings': '2kings',
+  '1 chronicles': '1chronicles',
+  '1chronicles': '1chronicles',
+  '2 chronicles': '2chronicles',
+  '2chronicles': '2chronicles',
+  'ezra': 'ezra',
+  'nehemiah': 'nehemiah',
+  'esther': 'esther',
+  'job': 'job',
+  'psalm': 'psalm',
+  'psalms': 'psalm',
+  'proverbs': 'proverbs',
+  'ecclesiastes': 'ecclesiastes',
+  'isaiah': 'isaiah',
+  'jeremiah': 'jeremiah',
+  'lamentations': 'lamentations',
+  'ezekiel': 'ezekiel',
+  'daniel': 'daniel',
+  'hosea': 'hosea',
+  'joel': 'joel',
+  'amos': 'amos',
+  'obadiah': 'obadiah',
+  'jonah': 'jonah',
+  'micah': 'micah',
+  'nahum': 'nahum',
+  'habakkuk': 'habakkuk',
+  'zephaniah': 'zephaniah',
+  'haggai': 'haggai',
+  'zechariah': 'zechariah',
+  'malachi': 'malachi',
+  'matthew': 'matthew',
+  'mark': 'mark',
+  'luke': 'luke',
+  'john': 'john',
+  'acts': 'acts',
+  'romans': 'romans',
+  '1 corinthians': '1corinthians',
+  '1corinthians': '1corinthians',
+  '2 corinthians': '2corinthians',
+  '2corinthians': '2corinthians',
+  'galatians': 'galatians',
+  'ephesians': 'ephesians',
+  'philippians': 'philippians',
+  'colossians': 'colossians',
+  '1 thessalonians': '1thessalonians',
+  '1thessalonians': '1thessalonians',
+  '2 thessalonians': '2thessalonians',
+  '2thessalonians': '2thessalonians',
+  '1 timothy': '1timothy',
+  '1timothy': '1timothy',
+  '2 timothy': '2timothy',
+  '2timothy': '2timothy',
+  'titus': 'titus',
+  'philemon': 'philemon',
+  'hebrews': 'hebrews',
+  'james': 'james',
+  '1 peter': '1peter',
+  '1peter': '1peter',
+  '2 peter': '2peter',
+  '2peter': '2peter',
+  '1 john': '1john',
+  '1john': '1john',
+  '2 john': '2john',
+  '2john': '2john',
+  '3 john': '3john',
+  '3john': '3john',
+  'jude': 'jude',
+  'revelation': 'revelation',
+};
 
-  const url = new URL(`https://api.scripture.api.bible${endpoint}`);
-  Object.entries(query).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      url.searchParams.set(key, String(value));
-    }
-  });
+function normalizeBookKey(bookKey) {
+  const normalized = bookKey.toLowerCase().trim();
+  return BOOK_ID_MAP[normalized] || normalized;
+}
 
-  const response = await fetch(url.toString(), {
-    headers: {
-      'api-key': apiKey,
-      Accept: 'application/json',
-    },
-  });
+async function fetchOpenScriptureApi(endpoint) {
+  const baseUrl = 'https://openscriptureapi.org/api/scriptures/v1/lds/en';
+  const url = `${baseUrl}${endpoint}`;
+
+  const response = await fetch(url);
 
   if (!response.ok) {
     const body = await response.text();
-    throw { status: response.status, message: `Bible API error: ${body}` };
+    throw { status: response.status, message: `Open Scripture API error: ${body}` };
   }
   return response.json();
 }
 
-let bibleBookMap = null;
-
-async function getBibleBookId(bookKey) {
-  if (!bibleBookMap) {
-    const bibleId = config.bibleId || 'de4e12af7f28f599-01';
-    const data = await fetchBibleApi(`/v1/bibles/${bibleId}/books`);
-    bibleBookMap = {};
-    for (const book of data.data) {
-      const normalizedName = book.name.toLowerCase();
-      const normalizedLong = (book.nameLong || '').toLowerCase();
-      bibleBookMap[normalizedName] = book.id;
-      bibleBookMap[normalizedLong] = book.id;
-      bibleBookMap[book.abbreviation.toLowerCase()] = book.id;
-      bibleBookMap[book.abbreviationLocal?.toLowerCase()] = book.id;
-    }
-  }
-
-  const normalized = bookKey.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return Object.entries(bibleBookMap).reduce((match, [key, id]) => {
-    if (key.replace(/[^a-z0-9]/g, '') === normalized) {
-      return id;
-    }
-    return match;
-  }, null);
-}
-
 async function fetchBibleChapter(book, chapter) {
-  const bibleId = config.bibleId || 'de4e12af7f28f599-01';
-  const bookId = await getBibleBookId(book);
-  if (!bookId) {
-    throw { status: 404, message: 'Bible book not found' };
+  const bookId = normalizeBookKey(book);
+  
+  try {
+    const chapterData = await fetchOpenScriptureApi(`/book/${bookId}/${chapter}`);
+    return chapterData;
+  } catch (err) {
+    throw { status: 404, message: `Could not find ${book} chapter ${chapter}` };
   }
-
-  const chaptersResponse = await fetchBibleApi(`/v1/bibles/${bibleId}/books/${bookId}/chapters`);
-  const chapterSummary = chaptersResponse.data.find((item) => item.number === String(chapter));
-  if (!chapterSummary) {
-    throw { status: 404, message: 'Chapter not found' };
-  }
-
-  const chapterResponse = await fetchBibleApi(`/v1/bibles/${bibleId}/chapters/${chapterSummary.id}`, {
-    'content-type': 'text',
-    'include-verse-numbers': 'true',
-  });
-  return chapterResponse.data;
 }
 
 const httpService = app.listen(port, () => {
