@@ -1,5 +1,5 @@
 {
-  "name": "simon-service",
+  "name": "bible-service",
   "version": "1.0.0",
   "description": "This demonstrates a service for a web application.",
   "main": "index.js",
