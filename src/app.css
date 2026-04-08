@@ -63,6 +63,37 @@ body {
     color: var(--text);
 }
 
+/* ---------- Bootstrap Color Overrides ---------- */
+/* Override nav-pills active and hover colors */
+.nav-pills .nav-link.active {
+    background-color: #d7e7e4 !important;
+    color: #21375E !important;
+    border: 1px solid #d7e7e4 !important;
+}
+
+.nav-pills .nav-link:hover {
+    background-color: #c5d7d1 !important;
+    color: #21375E !important;
+}
+
+.nav-pills .nav-link {
+    color: #21375E !important;
+}
+
+[data-theme="dark"] .nav-pills .nav-link.active {
+    background-color: #d7e7e4 !important;
+    color: #1A2538 !important;
+}
+
+[data-theme="dark"] .nav-pills .nav-link:hover {
+    background-color: #c5d7d1 !important;
+    color: #1A2538 !important;
+}
+
+[data-theme="dark"] .nav-pills .nav-link {
+    color: #D7E7E4 !important;
+}
+
 /* ---------- Header ---------- */
 header {
     background: var(--header-bg);
