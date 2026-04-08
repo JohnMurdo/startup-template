@@ -57,7 +57,6 @@ export function Login(props) {
         )}
       </div>
         <footer>
-            <button id="toggle">Toggle Dark Mode</button>
             <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
         </footer>
       </div>

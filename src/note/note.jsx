@@ -37,8 +37,6 @@ export function Note() {
             <button>Save Note</button>
         </main>
         <footer>
-            {/* <!-- Button by Copilot --> */}
-            <button id="toggle">Toggle Dark Mode</button>
             <nav>
                 <NavLink to="../friends"   >
                     <button>Share</button>

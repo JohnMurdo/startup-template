@@ -19,7 +19,7 @@ function parseChapterId(chapterId) {
   return { book: match[1], chapter: parseInt(match[2], 10) };
 }
 
-export function Read(props) {
+export function Read() {
   const [book, setBook] = React.useState('Genesis');
   const [chapter, setChapter] = React.useState(1);
   const [searchValue, setSearchValue] = React.useState('Genesis 1');
@@ -166,7 +166,6 @@ export function Read(props) {
         )}
 
         <footer className="mt-4 text-center">
-          <button onClick={props.onToggleTheme} className="btn btn-secondary me-2">Toggle Dark Mode</button>
           <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank" rel="noreferrer" className="btn btn-link text-light">GitHub</a>
         </footer>
       </div>

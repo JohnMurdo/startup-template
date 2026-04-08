@@ -26,8 +26,8 @@ export default function App() {
 
   return (
   <BrowserRouter>
-    <div className="app d-flex justify-content-end p-3">
-      <button type="button" className="btn btn-secondary" onClick={toggleTheme}>
+    <div className="theme-toggle-wrapper">
+      <button type="button" className="theme-toggle btn btn-secondary" onClick={toggleTheme}>
         Toggle Dark Mode
       </button>
     </div>
@@ -46,7 +46,7 @@ export default function App() {
             }
             exact
           />
-      <Route path='/read' element={<Read onToggleTheme={toggleTheme} />} />
+      <Route path='/read' element={<Read />} />
       <Route path='/note' element={<Note />} />
       <Route path='/friends' element={<Friends />} />
       <Route path='*' element={<NotFound />} />

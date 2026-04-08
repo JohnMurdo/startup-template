@@ -55,13 +55,6 @@ export function Friends() {
             </div>
         </main>
         <footer>
-            <button id="toggle">Toggle Dark Mode</button>
-            {/* <script>
-                const html = document.documentElement;
-                document.getElementById("toggle").onclick = () => {
-                    html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
-                };
-            </script> */}
             <nav>
                 <NavLink to="../read">
                     <button>Search</button>
