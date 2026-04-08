@@ -44,8 +44,15 @@ async function addNote(note) {
   return noteCollection.insertOne(note);
 }
 
-function getNotes(userEmail) {
-  return noteCollection.find({ userEmail }).toArray();
+function getNotes(userEmail, book, chapter) {
+  const query = { userEmail };
+  if (book) {
+    query.book = book;
+  }
+  if (chapter != null) {
+    query.chapter = chapter;
+  }
+  return noteCollection.find(query).sort({ date: -1 }).toArray();
 }
 
 async function updateNote(noteId, updates) {

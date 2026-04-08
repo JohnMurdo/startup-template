@@ -103,6 +103,17 @@ export function Read() {
             </nav>
           </div>
 
+          {chapterData && (
+            <div className="mb-3 text-end">
+              <NavLink
+                className="btn btn-outline-primary"
+                to={`/note?book=${encodeURIComponent(title)}&chapter=${currentChapterNumber}`}
+              >
+                Open notes for this chapter
+              </NavLink>
+            </div>
+          )}
+
           <form className="mb-3" onSubmit={handleSearchSubmit}>
             <div className="input-group">
               <input

@@ -86,7 +86,8 @@ const verifyAuth = async (req, res, next) => {
 // Get Notes
 apiRouter.get('/notes', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
-  const notes = await DB.getNotes(user.email);
+  const { book, chapter } = req.query;
+  const notes = await DB.getNotes(user.email, book, chapter ? parseInt(chapter, 10) : undefined);
   res.send(notes);
 });
 
@@ -96,9 +97,12 @@ apiRouter.post('/notes', verifyAuth, async (req, res) => {
   const note = {
     userEmail: user.email,
     content: req.body.content,
+    book: req.body.book || null,
+    chapter: req.body.chapter ? parseInt(req.body.chapter, 10) : null,
     date: new Date(),
   };
-  await DB.addNote(note);
+  const result = await DB.addNote(note);
+  note._id = result.insertedId;
   res.status(201).send(note);
 });
 

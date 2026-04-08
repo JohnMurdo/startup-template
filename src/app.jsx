@@ -46,7 +46,7 @@ export default function App() {
             }
             exact
           />
-      <Route path='/read' element={<Read />} />
+      <Route path='/read' element={<Read userName={userName} authState={authState} />} />
       <Route path='/note' element={<Note userName={userName} authState={authState} />} />
       <Route path='/friends' element={<Friends />} />
       <Route path='*' element={<NotFound />} />
