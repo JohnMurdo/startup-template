@@ -112,7 +112,13 @@ apiRouter.post('/notes', verifyAuth, async (req, res) => {
 // Update Note
 apiRouter.put('/notes/:id', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
-  await DB.updateNote(req.params.id, { content: req.body.content });
+  const updates = {
+    content: req.body.content,
+    book: req.body.book || null,
+    chapter: req.body.chapter ? parseInt(req.body.chapter, 10) : null,
+    isPublic: req.body.isPublic || false,
+  };
+  await DB.updateNote(req.params.id, updates);
   res.status(204).end();
 });
 

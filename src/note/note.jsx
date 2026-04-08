@@ -98,7 +98,13 @@ export function Note(props) {
       }
 
       if (selectedNoteId) {
-        setNotes((current) => current.map((note) => note._id === selectedNoteId ? { ...note, content, book: selectedBook || null, chapter: selectedChapter ? parseInt(selectedChapter, 10) : null } : note));
+        setNotes((current) => current.map((note) => note._id === selectedNoteId ? {
+          ...note,
+          content,
+          book: selectedBook || null,
+          chapter: selectedChapter ? parseInt(selectedChapter, 10) : null,
+          isPublic,
+        } : note));
         setSuccess('Note updated successfully!');
       } else {
         const createdNote = await response.json();
