@@ -55,6 +55,10 @@ function getNotes(userEmail, book, chapter) {
   return noteCollection.find(query).sort({ date: -1 }).toArray();
 }
 
+function getPublicNotes() {
+  return noteCollection.find({ isPublic: true }).sort({ date: -1 }).toArray();
+}
+
 async function updateNote(noteId, updates) {
   return noteCollection.updateOne({ _id: new ObjectId(noteId) }, { $set: updates });
 }
@@ -71,12 +75,40 @@ function getPosts() {
   return postCollection.find().sort({ date: -1 }).toArray();
 }
 
+async function likePost(postId, userEmail) {
+  return postCollection.updateOne(
+    { _id: new ObjectId(postId) },
+    { $addToSet: { likes: userEmail } }
+  );
+}
+
+async function unlikePost(postId, userEmail) {
+  return postCollection.updateOne(
+    { _id: new ObjectId(postId) },
+    { $pull: { likes: userEmail } }
+  );
+}
+
 async function addComment(comment) {
   return commentCollection.insertOne(comment);
 }
 
 function getComments(postId) {
   return commentCollection.find({ postId: new ObjectId(postId) }).sort({ date: 1 }).toArray();
+}
+
+async function likeComment(commentId, userEmail) {
+  return commentCollection.updateOne(
+    { _id: new ObjectId(commentId) },
+    { $addToSet: { likes: userEmail } }
+  );
+}
+
+async function unlikeComment(commentId, userEmail) {
+  return commentCollection.updateOne(
+    { _id: new ObjectId(commentId) },
+    { $pull: { likes: userEmail } }
+  );
 }
 
 module.exports = {
@@ -87,10 +119,15 @@ module.exports = {
   updateUserRemoveAuth,
   addNote,
   getNotes,
+  getPublicNotes,
   updateNote,
   deleteNote,
   addPost,
   getPosts,
+  likePost,
+  unlikePost,
   addComment,
   getComments,
+  likeComment,
+  unlikeComment,
 };

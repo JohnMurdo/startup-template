@@ -22,6 +22,7 @@ export function Note(props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [isPublic, setIsPublic] = useState(false);
 
   useEffect(() => {
     if (authState === AuthState.Authenticated) {
@@ -56,6 +57,7 @@ export function Note(props) {
     setContent(note.content);
     setSelectedBook(note.book || '');
     setSelectedChapter(note.chapter ? String(note.chapter) : '');
+    setIsPublic(note.isPublic || false);
   }
 
   function clearEditor() {
@@ -63,6 +65,7 @@ export function Note(props) {
     setContent('');
     setSelectedBook(chapterBook || '');
     setSelectedChapter(chapterNumber || '');
+    setIsPublic(false);
     setSuccess(null);
   }
 
@@ -79,6 +82,7 @@ export function Note(props) {
         content,
         book: selectedBook || null,
         chapter: selectedChapter || null,
+        isPublic,
       };
       const url = selectedNoteId ? `/api/notes/${selectedNoteId}` : '/api/notes';
       const method = selectedNoteId ? 'PUT' : 'POST';
@@ -201,6 +205,20 @@ export function Note(props) {
               onChange={(e) => setContent(e.target.value)}
               placeholder="Write your note here..."
             />
+          </div>
+          <div className="mb-3">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="isPublic"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+              />
+              <label className="form-check-label" htmlFor="isPublic">
+                Make this note public (visible to friends)
+              </label>
+            </div>
           </div>
           <div className="d-flex gap-2 justify-content-center mb-3">
             <button className="btn btn-primary" onClick={saveNote} disabled={!content.trim()}>

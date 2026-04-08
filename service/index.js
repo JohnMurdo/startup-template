@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const express = require('express');
 const path = require('path');
 const uuid = require('uuid');
+const WebSocket = require('ws');
 const config = require('../dbConfig.json');
 const app = express();
 const DB = require('./database.js');
@@ -99,6 +100,7 @@ apiRouter.post('/notes', verifyAuth, async (req, res) => {
     content: req.body.content,
     book: req.body.book || null,
     chapter: req.body.chapter ? parseInt(req.body.chapter, 10) : null,
+    isPublic: req.body.isPublic || false,
     date: new Date(),
   };
   const result = await DB.addNote(note);
@@ -158,8 +160,39 @@ apiRouter.post('/posts/:id/comments', verifyAuth, async (req, res) => {
   res.status(201).send(comment);
 });
 
-// Get Bible Chapter
-apiRouter.get('/bible/:book/:chapter', async (req, res) => {
+// Get Public Notes
+apiRouter.get('/public-notes', async (req, res) => {
+  const notes = await DB.getPublicNotes();
+  res.send(notes);
+});
+
+// Like Post
+apiRouter.post('/posts/:id/like', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  await DB.likePost(req.params.id, user.email);
+  res.status(204).end();
+});
+
+// Unlike Post
+apiRouter.delete('/posts/:id/like', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  await DB.unlikePost(req.params.id, user.email);
+  res.status(204).end();
+});
+
+// Like Comment
+apiRouter.post('/comments/:id/like', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  await DB.likeComment(req.params.id, user.email);
+  res.status(204).end();
+});
+
+// Unlike Comment
+apiRouter.delete('/comments/:id/like', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  await DB.unlikeComment(req.params.id, user.email);
+  res.status(204).end();
+});
   try {
     const chapter = await fetchBibleChapter(req.params.book, req.params.chapter);
     if (!chapter) {
@@ -331,3 +364,118 @@ async function fetchBibleChapter(book, chapter) {
 const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+// WebSocket server for real-time updates
+const wss = new WebSocket.Server({ server: httpService });
+
+const clients = new Map();
+
+wss.on('connection', (ws, req) => {
+  const userId = uuid.v4();
+  clients.set(userId, ws);
+  console.log(`WebSocket client connected: ${userId}`);
+
+  ws.on('message', async (message) => {
+    try {
+      const data = JSON.parse(message.toString());
+      console.log('Received WebSocket message:', data);
+
+      // Handle different message types
+      if (data.type === 'like_post') {
+        await handleLikePost(data, userId);
+      } else if (data.type === 'unlike_post') {
+        await handleUnlikePost(data, userId);
+      } else if (data.type === 'like_comment') {
+        await handleLikeComment(data, userId);
+      } else if (data.type === 'unlike_comment') {
+        await handleUnlikeComment(data, userId);
+      } else if (data.type === 'new_comment') {
+        await handleNewComment(data, userId);
+      }
+    } catch (error) {
+      console.error('WebSocket message error:', error);
+    }
+  });
+
+  ws.on('close', () => {
+    clients.delete(userId);
+    console.log(`WebSocket client disconnected: ${userId}`);
+  });
+});
+
+async function handleLikePost(data, userId) {
+  try {
+    const user = await findUser('token', data.token);
+    if (!user) return;
+
+    await DB.likePost(data.postId, user.email);
+    // Broadcast the update without fetching details
+    broadcastToAll({ type: 'post_liked', postId: data.postId, userEmail: user.email });
+  } catch (error) {
+    console.error('Error liking post:', error);
+  }
+}
+
+async function handleUnlikePost(data, userId) {
+  try {
+    const user = await findUser('token', data.token);
+    if (!user) return;
+
+    await DB.unlikePost(data.postId, user.email);
+    broadcastToAll({ type: 'post_unliked', postId: data.postId, userEmail: user.email });
+  } catch (error) {
+    console.error('Error unliking post:', error);
+  }
+}
+
+async function handleLikeComment(data, userId) {
+  try {
+    const user = await findUser('token', data.token);
+    if (!user) return;
+
+    await DB.likeComment(data.commentId, user.email);
+    broadcastToAll({ type: 'comment_liked', commentId: data.commentId, userEmail: user.email });
+  } catch (error) {
+    console.error('Error liking comment:', error);
+  }
+}
+
+async function handleUnlikeComment(data, userId) {
+  try {
+    const user = await findUser('token', data.token);
+    if (!user) return;
+
+    await DB.unlikeComment(data.commentId, user.email);
+    broadcastToAll({ type: 'comment_unliked', commentId: data.commentId, userEmail: user.email });
+  } catch (error) {
+    console.error('Error unliking comment:', error);
+  }
+}
+
+async function handleNewComment(data, userId) {
+  try {
+    const user = await findUser('token', data.token);
+    if (!user) return;
+
+    const comment = {
+      postId: data.postId,
+      userEmail: user.email,
+      content: data.content,
+      date: new Date(),
+    };
+    await DB.addComment(comment);
+    const comments = await DB.getComments(data.postId);
+    broadcastToAll({ type: 'comments_updated', postId: data.postId, comments });
+  } catch (error) {
+    console.error('Error adding comment:', error);
+  }
+}
+
+function broadcastToAll(message) {
+  const messageStr = JSON.stringify(message);
+  clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(messageStr);
+    }
+  });
+}
