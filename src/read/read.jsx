@@ -31,8 +31,7 @@ export function Read() {
     setLoading(true);
     setError('');
     try {
-      const baseUrl = import.meta.env.DEV ? 'http://localhost:3000' : '';
-      const response = await fetch(`${baseUrl}/api/bible/${encodeURIComponent(bookName)}/${encodeURIComponent(chapterNumber)}`);
+      const response = await fetch(`/api/bible/${encodeURIComponent(bookName)}/${encodeURIComponent(chapterNumber)}`);
       if (!response.ok) {
         const body = await response.text();
         throw new Error(body || 'Unable to fetch chapter');
