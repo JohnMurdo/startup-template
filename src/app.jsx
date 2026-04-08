@@ -12,17 +12,17 @@ export default function App() {
   const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
   const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
   const [authState, setAuthState] = React.useState(currentAuthState);
-  
-  useEffect(() => {
-      const html = document.documentElement;
-      const toggle = document.getElementById("toggle");
+  const [theme, setTheme] = React.useState(localStorage.getItem('theme') || 'light');
 
-      if (toggle) {
-          toggle.onclick = () => {
-              html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
-          };
-      }
-  }, []);
+  useEffect(() => {
+    const html = document.documentElement;
+    html.dataset.theme = theme;
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  function toggleTheme() {
+    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+  }
 
   return (
   <BrowserRouter>
@@ -42,7 +42,7 @@ export default function App() {
             }
             exact
           />
-      <Route path='/read' element={<Read />} />
+      <Route path='/read' element={<Read onToggleTheme={toggleTheme} />} />
       <Route path='/note' element={<Note />} />
       <Route path='/friends' element={<Friends />} />
       <Route path='*' element={<NotFound />} />
