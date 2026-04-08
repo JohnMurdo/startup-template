@@ -101,6 +101,7 @@ apiRouter.post('/notes', verifyAuth, async (req, res) => {
     book: req.body.book || null,
     chapter: req.body.chapter ? parseInt(req.body.chapter, 10) : null,
     isPublic: req.body.isPublic || false,
+    likes: [],
     date: new Date(),
   };
   const result = await DB.addNote(note);
@@ -141,14 +142,20 @@ apiRouter.post('/posts', verifyAuth, async (req, res) => {
   res.status(201).send(post);
 });
 
-// Get Comments for a Post
+// Get Comments for a Note
+apiRouter.get('/notes/:id/comments', async (req, res) => {
+  const comments = await DB.getComments(req.params.id);
+  res.send(comments);
+});
+
+// Get Comments for a Post (legacy compatibility)
 apiRouter.get('/posts/:id/comments', async (req, res) => {
   const comments = await DB.getComments(req.params.id);
   res.send(comments);
 });
 
-// Add Comment to Post
-apiRouter.post('/posts/:id/comments', verifyAuth, async (req, res) => {
+// Add Comment to Note
+apiRouter.post('/notes/:id/comments', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   const comment = {
     postId: req.params.id,
@@ -166,17 +173,17 @@ apiRouter.get('/public-notes', async (req, res) => {
   res.send(notes);
 });
 
-// Like Post
-apiRouter.post('/posts/:id/like', verifyAuth, async (req, res) => {
+// Like Note
+apiRouter.post('/notes/:id/like', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
-  await DB.likePost(req.params.id, user.email);
+  await DB.likeNote(req.params.id, user.email);
   res.status(204).end();
 });
 
-// Unlike Post
-apiRouter.delete('/posts/:id/like', verifyAuth, async (req, res) => {
+// Unlike Note
+apiRouter.delete('/notes/:id/like', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
-  await DB.unlikePost(req.params.id, user.email);
+  await DB.unlikeNote(req.params.id, user.email);
   res.status(204).end();
 });
 
@@ -193,6 +200,9 @@ apiRouter.delete('/comments/:id/like', verifyAuth, async (req, res) => {
   await DB.unlikeComment(req.params.id, user.email);
   res.status(204).end();
 });
+
+// Get Bible Chapter
+apiRouter.get('/bible/:book/:chapter', async (req, res) => {
   try {
     const chapter = await fetchBibleChapter(req.params.book, req.params.chapter);
     if (!chapter) {
@@ -381,10 +391,10 @@ wss.on('connection', (ws, req) => {
       console.log('Received WebSocket message:', data);
 
       // Handle different message types
-      if (data.type === 'like_post') {
-        await handleLikePost(data, userId);
-      } else if (data.type === 'unlike_post') {
-        await handleUnlikePost(data, userId);
+      if (data.type === 'like_note') {
+        await handleLikeNote(data, userId);
+      } else if (data.type === 'unlike_note') {
+        await handleUnlikeNote(data, userId);
       } else if (data.type === 'like_comment') {
         await handleLikeComment(data, userId);
       } else if (data.type === 'unlike_comment') {
@@ -403,28 +413,27 @@ wss.on('connection', (ws, req) => {
   });
 });
 
-async function handleLikePost(data, userId) {
+async function handleLikeNote(data, userId) {
   try {
     const user = await findUser('token', data.token);
     if (!user) return;
 
-    await DB.likePost(data.postId, user.email);
-    // Broadcast the update without fetching details
-    broadcastToAll({ type: 'post_liked', postId: data.postId, userEmail: user.email });
+    await DB.likeNote(data.noteId, user.email);
+    broadcastToAll({ type: 'note_liked', noteId: data.noteId, userEmail: user.email });
   } catch (error) {
-    console.error('Error liking post:', error);
+    console.error('Error liking note:', error);
   }
 }
 
-async function handleUnlikePost(data, userId) {
+async function handleUnlikeNote(data, userId) {
   try {
     const user = await findUser('token', data.token);
     if (!user) return;
 
-    await DB.unlikePost(data.postId, user.email);
-    broadcastToAll({ type: 'post_unliked', postId: data.postId, userEmail: user.email });
+    await DB.unlikeNote(data.noteId, user.email);
+    broadcastToAll({ type: 'note_unliked', noteId: data.noteId, userEmail: user.email });
   } catch (error) {
-    console.error('Error unliking post:', error);
+    console.error('Error unliking note:', error);
   }
 }
 
@@ -458,14 +467,14 @@ async function handleNewComment(data, userId) {
     if (!user) return;
 
     const comment = {
-      postId: data.postId,
+      postId: data.noteId,
       userEmail: user.email,
       content: data.content,
       date: new Date(),
     };
     await DB.addComment(comment);
-    const comments = await DB.getComments(data.postId);
-    broadcastToAll({ type: 'comments_updated', postId: data.postId, comments });
+    const comments = await DB.getComments(data.noteId);
+    broadcastToAll({ type: 'comments_updated', postId: data.noteId, comments });
   } catch (error) {
     console.error('Error adding comment:', error);
   }

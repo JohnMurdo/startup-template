@@ -41,6 +41,9 @@ async function updateUserRemoveAuth(user) {
 }
 
 async function addNote(note) {
+  if (!Array.isArray(note.likes)) {
+    note.likes = [];
+  }
   return noteCollection.insertOne(note);
 }
 
@@ -75,16 +78,16 @@ function getPosts() {
   return postCollection.find().sort({ date: -1 }).toArray();
 }
 
-async function likePost(postId, userEmail) {
-  return postCollection.updateOne(
-    { _id: new ObjectId(postId) },
+async function likeNote(noteId, userEmail) {
+  return noteCollection.updateOne(
+    { _id: new ObjectId(noteId) },
     { $addToSet: { likes: userEmail } }
   );
 }
 
-async function unlikePost(postId, userEmail) {
-  return postCollection.updateOne(
-    { _id: new ObjectId(postId) },
+async function unlikeNote(noteId, userEmail) {
+  return noteCollection.updateOne(
+    { _id: new ObjectId(noteId) },
     { $pull: { likes: userEmail } }
   );
 }
@@ -124,8 +127,8 @@ module.exports = {
   deleteNote,
   addPost,
   getPosts,
-  likePost,
-  unlikePost,
+  likeNote,
+  unlikeNote,
   addComment,
   getComments,
   likeComment,

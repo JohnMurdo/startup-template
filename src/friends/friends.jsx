@@ -43,7 +43,10 @@ export function Friends(props) {
 
   function connectWebSocket() {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}`;
+    const backendPort = window.location.port === '5175' ? '3000' : window.location.port;
+    const wsUrl = backendPort
+      ? `${protocol}//${window.location.hostname}:${backendPort}`
+      : `${protocol}//${window.location.hostname}`;
     wsRef.current = new WebSocket(wsUrl);
 
     wsRef.current.onopen = () => {
@@ -65,10 +68,10 @@ export function Friends(props) {
   }
 
   function handleWebSocketMessage(data) {
-    if (data.type === 'post_liked') {
+    if (data.type === 'note_liked') {
       setNotes(currentNotes =>
         currentNotes.map(note =>
-          note._id === data.postId
+          note._id === data.noteId
             ? {
                 ...note,
                 likes: [...(note.likes || []), data.userEmail]
@@ -76,10 +79,10 @@ export function Friends(props) {
             : note
         )
       );
-    } else if (data.type === 'post_unliked') {
+    } else if (data.type === 'note_unliked') {
       setNotes(currentNotes =>
         currentNotes.map(note =>
-          note._id === data.postId
+          note._id === data.noteId
             ? {
                 ...note,
                 likes: (note.likes || []).filter(email => email !== data.userEmail)
@@ -132,7 +135,7 @@ export function Friends(props) {
     }
 
     try {
-      const response = await fetch(`/api/posts/${postId}/comments`);
+      const response = await fetch(`/api/notes/${postId}/comments`);
       if (!response.ok) {
         throw new Error('Failed to load comments');
       }
@@ -150,7 +153,7 @@ export function Friends(props) {
     try {
       const token = getAuthToken();
       const method = isLiked ? 'DELETE' : 'POST';
-      const response = await fetch(`/api/posts/${postId}/like`, {
+      const response = await fetch(`/api/notes/${postId}/like`, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -179,8 +182,8 @@ export function Friends(props) {
       // Send WebSocket message
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
         wsRef.current.send(JSON.stringify({
-          type: isLiked ? 'unlike_post' : 'like_post',
-          postId,
+          type: isLiked ? 'unlike_note' : 'like_note',
+          noteId: postId,
           token,
         }));
       }
@@ -238,7 +241,7 @@ export function Friends(props) {
 
     try {
       const token = getAuthToken();
-      const response = await fetch(`/api/posts/${postId}/comments`, {
+      const response = await fetch(`/api/notes/${postId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -258,7 +261,7 @@ export function Friends(props) {
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
         wsRef.current.send(JSON.stringify({
           type: 'new_comment',
-          postId,
+          noteId: postId,
           content: newComment,
           token,
         }));
