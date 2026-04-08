@@ -1,65 +1,174 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+function parseReference(reference) {
+  const trimmed = reference.trim();
+  const parts = trimmed.split(/\s+/);
+  if (parts.length < 2) return null;
+
+  const chapterPart = parts[parts.length - 1];
+  const chapterNumber = parseInt(chapterPart, 10);
+  if (Number.isNaN(chapterNumber)) return null;
+
+  const book = parts.slice(0, parts.length - 1).join(' ');
+  return { book, chapter: chapterNumber };
+}
+
+function parseChapterId(chapterId) {
+  const match = chapterId.match(/^([0-9]*[a-z]+)(\d+)$/i);
+  if (!match) return null;
+  return { book: match[1], chapter: parseInt(match[2], 10) };
+}
 
 export function Read() {
+  const [book, setBook] = React.useState('Genesis');
+  const [chapter, setChapter] = React.useState(1);
+  const [searchValue, setSearchValue] = React.useState('Genesis 1');
+  const [chapterData, setChapterData] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
 
-    const genesisChapters = ['Genesis 1','Genesis 2','Genesis 3'];
-    const [index, setIndex] = React.useState(0);
-    const [text, setText] = React.useState(genesisChapters[index]);
-    function updateChapter(newIndex) {
-        setIndex(newIndex);
-        setText(genesisChapters[index]);
+  async function loadChapter(bookName, chapterNumber) {
+    setLoading(true);
+    setError('');
+    try {
+      const baseUrl = import.meta.env.DEV ? 'http://localhost:3000' : '';
+      const response = await fetch(`${baseUrl}/api/bible/${encodeURIComponent(bookName)}/${encodeURIComponent(chapterNumber)}`);
+      if (!response.ok) {
+        const body = await response.text();
+        throw new Error(body || 'Unable to fetch chapter');
+      }
+      const data = await response.json();
+      setChapterData(data);
+      setBook(bookName);
+      setChapter(chapterNumber);
+      setSearchValue(`${bookName} ${chapterNumber}`);
+    } catch (err) {
+      setError(err.message || 'Failed to load chapter');
+      setChapterData(null);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadChapter(book, chapter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleSearchSubmit(event) {
+    event.preventDefault();
+    const parsed = parseReference(searchValue);
+    if (!parsed) {
+      setError('Please enter a book and chapter, for example "John 3".');
+      return;
     }
 
+    loadChapter(parsed.book, parsed.chapter);
+  }
+
+  function handleNavigateChapter(direction) {
+    if (!chapterData) return;
+
+    const chapterId = direction === 'previous' ? chapterData.prevChapterId : chapterData.nextChapterId;
+    if (!chapterId) return;
+
+    const parsed = parseChapterId(chapterId);
+    if (!parsed) {
+      setError('Unable to navigate to the next chapter.');
+      return;
+    }
+
+    loadChapter(parsed.book, parsed.chapter);
+  }
+
+  const verseList = chapterData?.chapter?.verses || [];
+  const title = chapterData?.chapter?.bookTitle || book;
+  const currentChapterNumber = chapterData?.chapter?.number || chapter;
+
   return (
-    <main className="container-fluid bg-secondary text-center">
-      <div>
-        <header>
-            {/* <?xml version="1.0" encoding="utf-8"?> */}
-            {/* <!-- License: CC Attribution. Made by tetrisly: https://tetrisly.gumroad.com/l/freeicons --> */}
-            <svg id="nav_book" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M9.5,4.49758215 L12,5.53107667 L14.5,4.49758215 C16.1048534,3.83413928 17.8951466,3.83413928 19.5,4.49758215 L21.3713907,5.27121095 C21.7510491,5.4281609 22,5.80818588 22,6.23078653 L22,18.4734945 C22,19.0442778 21.5522847,19.506989 21,19.506989 C20.8727806,19.506989 20.7467296,19.4819008 20.6286093,19.4330701 L19.5,18.9665055 C17.8951466,18.3030626 16.1048534,18.3030626 14.5,18.9665055 L12,20 L9.5,18.9665055 C7.89514664,18.3030626 6.10485336,18.3030626 4.5,18.9665055 L3.37139068,19.4330701 C2.85860716,19.6450537 2.27663672,19.3872837 2.07152331,18.8573248 C2.0242752,18.7352481 2,18.6049751 2,18.4734945 L2,6.23078653 C2,5.80818588 2.24895094,5.4281609 2.62860932,5.27121095 L4.5,4.49758215 C6.10485336,3.83413928 7.89514664,3.83413928 9.5,4.49758215 Z M5.26407973,6.34587384 L4,6.86844163 L4,17.0141076 C6.02542236,16.2540083 8.25752963,16.2887104 10.2640797,17.1182138 L11,17.422 L11,7.282 L8.73592027,6.34587384 C7.62037223,5.88470872 6.37962777,5.88470872 5.26407973,6.34587384 Z M15.2640797,6.34587384 L13,7.281 L13,17.422 L13.7359203,17.1182138 C15.7424704,16.2887104 17.9745777,16.2540083 20,17.0141077 L20,6.86844163 L18.7359203,6.34587384 C17.6203722,5.88470872 16.3796278,5.88470872 15.2640797,6.34587384 Z"/>
-            </svg>
-            <h1>
-                Read
-            </h1>
+    <main className="container-fluid bg-secondary text-light py-4">
+      <div className="mx-auto" style={{ maxWidth: 900 }}>
+        <header className="mb-4">
+          <div className="d-flex align-items-center justify-content-between mb-3">
+            <div>
+              <h1>Read</h1>
+              <p className="mb-0">Read scripture chapters and navigate by chapter or search.</p>
+            </div>
             <nav>
-                <h2>Username</h2>
-                <ul>
-                    <li>
-                        <NavLink to="../">Login</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="../read">Read</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="../note">Note</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="../friends">Friends</NavLink>
-                    </li>
-                </ul>
+              <ul className="nav">
+                <li className="nav-item"><NavLink className="nav-link" to="../">Login</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" to="../read">Read</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" to="../note">Note</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" to="../friends">Friends</NavLink></li>
+              </ul>
             </nav>
+          </div>
+
+          <form className="mb-3" onSubmit={handleSearchSubmit}>
+            <div className="input-group">
+              <input
+                className="form-control"
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="Search scripture, e.g. Genesis 1"
+              />
+              <button className="btn btn-primary" type="submit" disabled={loading}>Go</button>
+            </div>
+          </form>
+
+          <div className="d-flex align-items-center justify-content-between">
+            <button
+              className="btn btn-outline-light"
+              type="button"
+              onClick={() => handleNavigateChapter('previous')}
+              disabled={!chapterData?.prevChapterId || loading}
+            >
+              ← Previous
+            </button>
+            <div>
+              <strong>{title} {currentChapterNumber}</strong>
+            </div>
+            <button
+              className="btn btn-outline-light"
+              type="button"
+              onClick={() => handleNavigateChapter('next')}
+              disabled={!chapterData?.nextChapterId || loading}
+            >
+              Next →
+            </button>
+          </div>
         </header>
-        <main>
-            {/* add java script that grabs gen1, 2 3 from txt file */}
-            <p>
-                {text}
-            </p>
-        </main>
-        <footer>
-            <button id="toggle">Toggle Dark Mode</button>
-            <nav>
-                <a href="#">
-                    <button onClick={() => updateChapter(index > 0 ? index - 1 : 0)}>&lt;</button>
-                </a>
-                Genesis 1
-                <a href="#">
-                    <button onClick={() => updateChapter(index < genesisChapters.length - 1 ? index + 1 : index)}>&gt;</button>
-                </a>
-            </nav>
-            <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
-            <a href="https://api.bible/">[Bible translation name] © 2026</a>
+
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
+        {loading && (
+          <div className="alert alert-secondary" role="status">
+            Loading chapter...
+          </div>
+        )}
+
+        {!loading && !error && (
+          <section className="bg-light text-dark rounded p-4">
+            {verseList.length > 0 ? (
+              verseList.map((verse, index) => (
+                <p key={index} className="mb-2">
+                  <strong>{index + 1}.</strong> {verse.text}
+                </p>
+              ))
+            ) : (
+              <p>No verses found for this chapter.</p>
+            )}
+          </section>
+        )}
+
+        <footer className="mt-4 text-center">
+          <button id="toggle" className="btn btn-secondary me-2">Toggle Dark Mode</button>
+          <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank" rel="noreferrer" className="btn btn-link text-light">GitHub</a>
         </footer>
       </div>
     </main>
