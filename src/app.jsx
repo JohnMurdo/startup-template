@@ -26,7 +26,11 @@ export default function App() {
 
   return (
   <BrowserRouter>
-  <div className="app bg-dark text-light"></div>
+    <div className="app d-flex justify-content-end p-3">
+      <button type="button" className="btn btn-secondary" onClick={toggleTheme}>
+        Toggle Dark Mode
+      </button>
+    </div>
     <Routes>
       <Route
             path='/'
