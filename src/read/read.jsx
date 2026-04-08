@@ -126,28 +126,6 @@ export function Read() {
               <button className="btn btn-primary" type="submit" disabled={loading}>Go</button>
             </div>
           </form>
-
-          <div className="d-flex align-items-center justify-content-between">
-            <button
-              className="btn btn-outline-light"
-              type="button"
-              onClick={() => handleNavigateChapter('previous')}
-              disabled={!chapterData?.prevChapterId || loading}
-            >
-              ← Previous
-            </button>
-            <div>
-              <strong>{title} {currentChapterNumber}</strong>
-            </div>
-            <button
-              className="btn btn-outline-light"
-              type="button"
-              onClick={() => handleNavigateChapter('next')}
-              disabled={!chapterData?.nextChapterId || loading}
-            >
-              Next →
-            </button>
-          </div>
         </header>
 
         {error && (
@@ -180,6 +158,32 @@ export function Read() {
           <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank" rel="noreferrer" className="btn btn-link text-light">GitHub</a>
         </footer>
       </div>
+
+      {chapterData && (
+        <nav className="fixed-navigation-bar">
+          <div className="d-flex align-items-center justify-content-center gap-3">
+            <button
+              className="btn btn-outline-light"
+              type="button"
+              onClick={() => handleNavigateChapter('previous')}
+              disabled={!chapterData?.prevChapterId || loading}
+            >
+              ← Previous
+            </button>
+            <div className="text-light">
+              <strong>{title} {currentChapterNumber}</strong>
+            </div>
+            <button
+              className="btn btn-outline-light"
+              type="button"
+              onClick={() => handleNavigateChapter('next')}
+              disabled={!chapterData?.nextChapterId || loading}
+            >
+              Next →
+            </button>
+          </div>
+        </nav>
+      )}
     </main>
   );
 }
