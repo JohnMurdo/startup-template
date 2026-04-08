@@ -4,18 +4,48 @@ import Button from 'react-bootstrap/Button';
 import { MessageDialog } from './messageDialog';
 
 export function Unauthenticated(props) {
-  const [userName, setUserName] = React.useState(props.userName);
+  const [userName, setUserName] = React.useState(props.userName || '');
   const [password, setPassword] = React.useState('');
   const [displayError, setDisplayError] = React.useState(null);
 
   async function loginUser() {
-    localStorage.setItem('userName', userName);
-    props.onLogin(userName);
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email: userName, password }),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        setDisplayError(error.msg || 'Login failed');
+        return;
+      }
+      localStorage.setItem('userName', userName);
+      props.onLogin(userName);
+    } catch (err) {
+      setDisplayError(err.message || 'Login failed');
+    }
   }
 
   async function createUser() {
-    localStorage.setItem('userName', userName);
-    props.onLogin(userName);
+    try {
+      const response = await fetch('/api/auth/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email: userName, password }),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        setDisplayError(error.msg || 'Create user failed');
+        return;
+      }
+      localStorage.setItem('userName', userName);
+      props.onLogin(userName);
+    } catch (err) {
+      setDisplayError(err.message || 'Create user failed');
+    }
   }
 
   return (
@@ -27,12 +57,12 @@ export function Unauthenticated(props) {
         </div>
         <div className='input-group mb-3'>
           <span className='input-group-text'>🔒</span>
-          <input className='form-control' type='password' onChange={(e) => setPassword(e.target.value)} placeholder='password' />
+          <input className='form-control' type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='password' />
         </div>
-        <Button variant='primary' onClick={() => loginUser()} disabled={!userName || !password}>
+        <Button variant='primary' onClick={loginUser} disabled={!userName || !password}>
           Login
         </Button>
-        <Button variant='secondary' onClick={() => createUser()} disabled={!userName || !password}>
+        <Button variant='secondary' onClick={createUser} disabled={!userName || !password}>
           Create
         </Button>
       </div>

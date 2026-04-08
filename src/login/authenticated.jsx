@@ -3,12 +3,18 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button';
 
-// import './authenticated.css';
-
 export function Authenticated(props) {
   const navigate = useNavigate();
 
-  function logout() {
+  async function logout() {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+    } catch {
+      // ignore errors; we still want to clear local state
+    }
     localStorage.removeItem('userName');
     props.onLogout();
   }
@@ -19,7 +25,7 @@ export function Authenticated(props) {
       <Button variant='primary' onClick={() => navigate('/read')}>
         Read
       </Button>
-      <Button variant='secondary' onClick={() => logout()}>
+      <Button variant='secondary' onClick={logout}>
         Logout
       </Button>
     </div>

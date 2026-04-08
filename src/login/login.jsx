@@ -45,7 +45,7 @@ export function Login(props) {
         <div>
         {/* {authState !== AuthState.Unknown && <h1>Welcome to Simon</h1>} */}
         {authState === AuthState.Authenticated && (
-          <Authenticated userName={userName} onLogout={() => onAuthChange(userName, AuthState.Unauthenticated)} />
+          <Authenticated userName={userName} onLogout={() => onAuthChange('', AuthState.Unauthenticated)} />
         )}
         {authState === AuthState.Unauthenticated && (
           <Unauthenticated
