@@ -1,53 +1,254 @@
-import React, { useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { AuthState } from '../login/authState.js';
 
-export function Note() {
+function getQueryValue(searchParams, key) {
+  const value = searchParams.get(key);
+  return value ? value : null;
+}
+
+export function Note(props) {
+  const { userName, authState } = props;
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const chapterBook = getQueryValue(searchParams, 'book');
+  const chapterNumber = getQueryValue(searchParams, 'chapter');
+
+  const [notes, setNotes] = useState([]);
+  const [content, setContent] = useState('');
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
+  const [selectedBook, setSelectedBook] = useState(chapterBook || '');
+  const [selectedChapter, setSelectedChapter] = useState(chapterNumber || '');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  useEffect(() => {
+    if (authState === AuthState.Authenticated) {
+      setSelectedBook(chapterBook || '');
+      setSelectedChapter(chapterNumber || '');
+      loadNotes();
+    }
+  }, [authState, chapterBook, chapterNumber]);
+
+  async function loadNotes() {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/notes', {
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.msg || 'Unable to load notes');
+      }
+      const noteList = await response.json();
+      setNotes(noteList);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function selectNote(note) {
+    setSelectedNoteId(note._id);
+    setContent(note.content);
+    setSelectedBook(note.book || '');
+    setSelectedChapter(note.chapter ? String(note.chapter) : '');
+  }
+
+  function clearEditor() {
+    setSelectedNoteId(null);
+    setContent('');
+    setSelectedBook(chapterBook || '');
+    setSelectedChapter(chapterNumber || '');
+    setSuccess(null);
+  }
+
+  async function saveNote() {
+    if (!content.trim()) {
+      return;
+    }
+
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const notePayload = {
+        content,
+        book: selectedBook || null,
+        chapter: selectedChapter || null,
+      };
+      const url = selectedNoteId ? `/api/notes/${selectedNoteId}` : '/api/notes';
+      const method = selectedNoteId ? 'PUT' : 'POST';
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(notePayload),
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.msg || 'Unable to save note');
+      }
+
+      if (selectedNoteId) {
+        setNotes((current) => current.map((note) => note._id === selectedNoteId ? { ...note, content, book: selectedBook || null, chapter: selectedChapter ? parseInt(selectedChapter, 10) : null } : note));
+        setSuccess('Note updated successfully!');
+      } else {
+        const createdNote = await response.json();
+        setNotes((current) => [createdNote, ...current]);
+        setSuccess('Note saved successfully!');
+      }
+      clearEditor();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function deleteNote(noteId) {
+    try {
+      const response = await fetch(`/api/notes/${noteId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.msg || 'Unable to delete note');
+      }
+      setNotes((current) => current.filter((note) => note._id !== noteId));
+      if (selectedNoteId === noteId) {
+        clearEditor();
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  if (authState !== AuthState.Authenticated) {
+    return (
+      <main className="container-fluid page-container text-center">
+        <div>
+          <header>
+            <h1>Notes</h1>
+            <nav>
+              <ul className="nav nav-pills justify-content-center">
+                <li className="nav-item"><NavLink className="nav-link" to="../">Login</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" to="../read">Read</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" to="../note">Note</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" to="../friends">Friends</NavLink></li>
+              </ul>
+            </nav>
+          </header>
+          <section className="mt-4">
+            <p>Please log in to access your user-specific notes.</p>
+            <NavLink to="../">
+              <button className="btn btn-primary">Go to Login</button>
+            </NavLink>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main className="container-fluid page-container text-center">
-      <div>
-        <header>
-            {/* <?xml version="1.0" encoding="utf-8"?> */}
-            {/* <!-- License: MIT. Made by framework7io: https://github.com/framework7io/framework7-icons --> */}
-            <svg id="nav_lightbulb" width="800px" height="800px" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-                <path d="M 19.5039 43.1523 L 36.4726 43.1523 C 37.2695 43.1523 37.7617 42.6601 37.7617 41.8633 L 37.7617 38.1133 C 37.7617 32.4414 46.0117 28.7852 46.0117 18.6601 C 46.0117 7.9961 38.7930 .8711 27.9883 .8711 C 17.1836 .8711 9.9883 7.9961 9.9883 18.6601 C 9.9883 28.7852 18.2148 32.4414 18.2148 38.1133 L 18.2148 41.8633 C 18.2148 42.6601 18.7304 43.1523 19.5039 43.1523 Z M 21.7070 38.1601 C 21.7070 31.2695 13.5273 27.5898 13.5273 18.6836 C 13.5273 10.1054 19.3164 4.4101 27.9883 4.4101 C 36.6601 4.4101 42.4726 10.1054 42.4726 18.6836 C 42.4726 27.5898 34.2695 31.2695 34.2695 38.1601 L 34.2695 39.6133 L 21.7070 39.6133 Z M 20.3711 49.4805 L 35.6055 49.4805 C 36.8008 49.4805 37.7617 48.4961 37.7617 47.2773 C 37.7617 46.0586 36.8008 45.0742 35.6055 45.0742 L 20.3711 45.0742 C 19.1758 45.0742 18.2148 46.0586 18.2148 47.2773 C 18.2148 48.4961 19.1758 49.4805 20.3711 49.4805 Z M 27.9883 55.1289 C 31.2226 55.1289 33.4961 53.6523 33.7304 51.3789 L 22.2461 51.3789 C 22.4570 53.6523 24.7304 55.1289 27.9883 55.1289 Z"/>
-            </svg>
-            <h1>
-                Note
-            </h1>
-            <nav>
-                <h2>Username</h2>
-                <ul>
-                    <li>
-                        <NavLink to="../">Login</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="../read">Read</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="../note">Note</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="../friends">Friends</NavLink>
-                    </li>
-                </ul>
-            </nav>
+    <main className="container-fluid page-container">
+      <div className="note-page">
+        <header className="text-center mb-4">
+          <h1>My Notes</h1>
+          <p className="text-muted">Signed in as {userName}</p>
+          <nav>
+            <ul className="nav nav-pills justify-content-center">
+              <li className="nav-item"><NavLink className="nav-link" to="../">Login</NavLink></li>
+              <li className="nav-item"><NavLink className="nav-link" to="../read">Read</NavLink></li>
+              <li className="nav-item"><NavLink className="nav-link active" to="../note">Note</NavLink></li>
+              <li className="nav-item"><NavLink className="nav-link" to="../friends">Friends</NavLink></li>
+            </ul>
+          </nav>
         </header>
-        <main>
-            <textarea>New Note...</textarea>
-            <button>Save Note</button>
-        </main>
-        <footer>
-            <nav>
-                <NavLink to="../friends"   >
-                    <button>Share</button>
-                </NavLink>
-                <NavLink to="../read">
-                    <button>Link</button>
-                </NavLink>
-                <button>Trash</button>
-            </nav>
-            <a href="https://github.com/JohnMurdo/startup-template.git" target="_blank">GitHub</a>
-        </footer>
+
+        <section className="note-editor mb-4">
+          <div className="mb-3">
+            <label className="form-label">Chapter (optional)</label>
+            <div className="row g-2">
+              <div className="col-sm-8">
+                <input
+                  className="form-control"
+                  type="text"
+                  value={selectedBook}
+                  onChange={(e) => setSelectedBook(e.target.value)}
+                  placeholder="Book name"
+                />
+              </div>
+              <div className="col-sm-4">
+                <input
+                  className="form-control"
+                  type="number"
+                  min="1"
+                  value={selectedChapter}
+                  onChange={(e) => setSelectedChapter(e.target.value)}
+                  placeholder="Chapter"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mb-3">
+            <textarea
+              className="form-control"
+              rows={8}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Write your note here..."
+            />
+          </div>
+          <div className="d-flex gap-2 justify-content-center mb-3">
+            <button className="btn btn-primary" onClick={saveNote} disabled={!content.trim()}>
+              {selectedNoteId ? 'Update Note' : 'Save Note'}
+            </button>
+            <button className="btn btn-outline-secondary" onClick={clearEditor}>
+              Clear
+            </button>
+          </div>
+          {error && <div className="alert alert-danger">{error}</div>}
+          {success && <div className="alert alert-success">{success}</div>}
+        </section>
+
+        <section className="note-list">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h2 className="mb-0">All your notes</h2>
+              <small className="text-muted">Sorted by most recent first.</small>
+            </div>
+            <button className="btn btn-sm btn-outline-primary" onClick={loadNotes} disabled={loading}>
+              Refresh
+            </button>
+          </div>
+          {loading && <div className="text-center">Loading notes…</div>}
+          {!loading && notes.length === 0 && <div className="text-muted">No notes yet. Create one above.</div>}
+          <div className="list-group">
+            {notes.map((note) => (
+              <div key={note._id} className="list-group-item">
+                <div className="d-flex justify-content-between align-items-start mb-2">
+                  <div>
+                    <small className="text-muted">
+                      {note.book && note.chapter ? `${note.book} ${note.chapter}` : 'General'} • {new Date(note.date).toLocaleString()}
+                    </small>
+                  </div>
+                  <div className="btn-group btn-group-sm" role="group">
+                    <button className="btn btn-outline-secondary" onClick={() => selectNote(note)}>
+                      Edit
+                    </button>
+                    <button className="btn btn-outline-danger" onClick={() => deleteNote(note._id)}>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                <p className="mb-0">{note.content}</p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </main>
   );
