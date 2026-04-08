@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 export function Friends() {
   return (
-    <main className="container-fluid bg-secondary text-center">
+    <main className="container-fluid page-container text-center">
       <div>
         <header>
             {/* <?xml version="1.0" encoding="utf-8"?/> */}

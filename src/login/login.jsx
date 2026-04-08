@@ -8,7 +8,7 @@ import { AuthState } from './authState';
 export function Login(props) {
   const { userName, authState, onAuthChange } = props;
   return (
-    <main className="container-fluid bg-secondary text-center">
+    <main className="container-fluid page-container text-center">
       <div>
         <header>
             <img src="CovenantCraftLogo.jpg" alt="CovenantCraftLogo"/>

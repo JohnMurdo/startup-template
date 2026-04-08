@@ -85,7 +85,7 @@ export function Read() {
   const currentChapterNumber = chapterData?.chapter?.number || chapter;
 
   return (
-    <main className="container-fluid bg-secondary text-light py-4">
+    <main className="container-fluid page-container text-light py-4">
       <div className="mx-auto" style={{ maxWidth: 900 }}>
         <header className="mb-4">
           <div className="d-flex align-items-center justify-content-between mb-3">

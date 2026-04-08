@@ -58,6 +58,11 @@ body {
     color: var(--text);
 }
 
+.page-container {
+    background: var(--bg);
+    color: var(--text);
+}
+
 /* ---------- Header ---------- */
 header {
     background: var(--header-bg);
