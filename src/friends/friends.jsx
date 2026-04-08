@@ -241,31 +241,32 @@ export function Friends(props) {
 
     try {
       const token = getAuthToken();
+      const commentContent = newComment;
       const response = await fetch(`/api/notes/${postId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ content: newComment }),
+        body: JSON.stringify({ content: commentContent }),
       });
 
       if (!response.ok) {
         throw new Error('Failed to add comment');
       }
 
-      setNewComment('');
-      setActiveCommentPost(null);
-
-      // Send WebSocket message
+      // Send WebSocket message before clearing the comment
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
         wsRef.current.send(JSON.stringify({
           type: 'new_comment',
           noteId: postId,
-          content: newComment,
+          content: commentContent,
           token,
         }));
       }
+
+      setNewComment('');
+      setActiveCommentPost(null);
     } catch (err) {
       console.error('Error adding comment:', err);
     }

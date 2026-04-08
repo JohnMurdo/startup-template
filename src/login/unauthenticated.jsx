@@ -17,14 +17,20 @@ export function Unauthenticated(props) {
         body: JSON.stringify({ email: userName, password }),
       });
       if (!response.ok) {
-        const error = await response.json();
-        setDisplayError(error.msg || 'Login failed');
+        let errorMsg = 'Login failed';
+        try {
+          const error = await response.json();
+          errorMsg = error.msg || errorMsg;
+        } catch {
+          errorMsg = `Server error: ${response.status}`;
+        }
+        setDisplayError(errorMsg);
         return;
       }
       localStorage.setItem('userName', userName);
       props.onLogin(userName);
     } catch (err) {
-      setDisplayError(err.message || 'Login failed');
+      setDisplayError(err.message || 'Login failed - is the server running?');
     }
   }
 
@@ -37,14 +43,20 @@ export function Unauthenticated(props) {
         body: JSON.stringify({ email: userName, password }),
       });
       if (!response.ok) {
-        const error = await response.json();
-        setDisplayError(error.msg || 'Create user failed');
+        let errorMsg = 'Create user failed';
+        try {
+          const error = await response.json();
+          errorMsg = error.msg || errorMsg;
+        } catch {
+          errorMsg = `Server error: ${response.status}`;
+        }
+        setDisplayError(errorMsg);
         return;
       }
       localStorage.setItem('userName', userName);
       props.onLogin(userName);
     } catch (err) {
-      setDisplayError(err.message || 'Create user failed');
+      setDisplayError(err.message || 'Create failed - is the server running?');
     }
   }
 

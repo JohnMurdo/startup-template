@@ -4,7 +4,6 @@ const express = require('express');
 const path = require('path');
 const uuid = require('uuid');
 const WebSocket = require('ws');
-const config = require('../dbConfig.json');
 const app = express();
 const DB = require('./database.js');
 
@@ -31,7 +30,7 @@ app.use((req, res, next) => {
 app.use(cookieParser());
 
 // Serve up the application's static content from the project root public folder
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Router for service endpoints
 const apiRouter = express.Router();
