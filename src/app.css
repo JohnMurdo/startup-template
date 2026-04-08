@@ -90,6 +90,37 @@ body {
     color: #1A2538 !important;
 }
 
+/* Override outline primary buttons */
+.btn-outline-primary {
+    color: #d7e7e4 !important;
+    border-color: #d7e7e4 !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: #d7e7e4 !important;
+    border-color: #d7e7e4 !important;
+    color: #21375E !important;
+}
+
+.btn-outline-primary:focus {
+    background-color: #d7e7e4 !important;
+    border-color: #d7e7e4 !important;
+    color: #21375E !important;
+    box-shadow: 0 0 0 0.2rem rgba(215, 231, 228, 0.5) !important;
+}
+
+[data-theme="dark"] .btn-outline-primary {
+    color: #d7e7e4 !important;
+    border-color: #d7e7e4 !important;
+}
+
+[data-theme="dark"] .btn-outline-primary:hover,
+[data-theme="dark"] .btn-outline-primary:focus {
+    background-color: #d7e7e4 !important;
+    border-color: #d7e7e4 !important;
+    color: #1A2538 !important;
+}
+
 /* Override nav-pills active and hover colors */
 .nav-pills .nav-link.active {
     background-color: #d7e7e4 !important;
