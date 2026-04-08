@@ -94,9 +94,9 @@ export function Read() {
               <p className="mb-0">Read scripture chapters and navigate by chapter or search.</p>
             </div>
             <nav>
-              <ul className="nav">
+              <ul className="nav nav-pills justify-content-center">
                 <li className="nav-item"><NavLink className="nav-link" to="../">Login</NavLink></li>
-                <li className="nav-item"><NavLink className="nav-link" to="../read">Read</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link active" to="../read">Read</NavLink></li>
                 <li className="nav-item"><NavLink className="nav-link" to="../note">Note</NavLink></li>
                 <li className="nav-item"><NavLink className="nav-link" to="../friends">Friends</NavLink></li>
               </ul>

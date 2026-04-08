@@ -16,20 +16,11 @@ export function Login(props) {
                 Login
             </h1>
             <nav>
-                <h2>Username</h2>
-                <ul>
-                    <li>
-                        <NavLink to="../">Login</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="../read">Read</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="../note">Note</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="../friends">Friends</NavLink>
-                    </li>
+                <ul className="nav nav-pills justify-content-center">
+                    <li className="nav-item"><NavLink className="nav-link active" to="../">Login</NavLink></li>
+                    <li className="nav-item"><NavLink className="nav-link" to="../read">Read</NavLink></li>
+                    <li className="nav-item"><NavLink className="nav-link" to="../note">Note</NavLink></li>
+                    <li className="nav-item"><NavLink className="nav-link" to="../friends">Friends</NavLink></li>
                 </ul>
             </nav>
         </header>
