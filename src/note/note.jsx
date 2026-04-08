@@ -97,20 +97,8 @@ export function Note(props) {
         throw new Error(data.msg || 'Unable to save note');
       }
 
-      if (selectedNoteId) {
-        setNotes((current) => current.map((note) => note._id === selectedNoteId ? {
-          ...note,
-          content,
-          book: selectedBook || null,
-          chapter: selectedChapter ? parseInt(selectedChapter, 10) : null,
-          isPublic,
-        } : note));
-        setSuccess('Note updated successfully!');
-      } else {
-        const createdNote = await response.json();
-        setNotes((current) => [createdNote, ...current]);
-        setSuccess('Note saved successfully!');
-      }
+      await loadNotes();
+      setSuccess(selectedNoteId ? 'Note updated successfully!' : 'Note saved successfully!');
       clearEditor();
     } catch (err) {
       setError(err.message);
@@ -127,7 +115,7 @@ export function Note(props) {
         const data = await response.json();
         throw new Error(data.msg || 'Unable to delete note');
       }
-      setNotes((current) => current.filter((note) => note._id !== noteId));
+      await loadNotes();
       if (selectedNoteId === noteId) {
         clearEditor();
       }
