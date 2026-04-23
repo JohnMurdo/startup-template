@@ -114,12 +114,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [x] **Node.js/Express HTTP service** - Created an Express server with middleware for JSON parsing, CORS, and cookie handling.
+- [x] **Static middleware for frontend** - Set up static file serving from the public directory for the frontend application.
+- [x] **Calls to third party endpoints** - Configured CORS headers to allow cross-origin requests and implemented a modular API router for service endpoints.
+- [x] **Backend service endpoints** - Created endpoints for authentication (create, login, logout) and data management (notes, posts, comments) with database integration.
+- [x] **Frontend calls service endpoints** - Frontend makes HTTP calls to `/api/auth/*` and `/api/notes` endpoints to handle user sessions and data operations.
+- [x] **Supports registration, login, logout, and restricted endpoint** - Implemented `/auth/create` for registration, `/auth/login` for authentication, `/auth/logout` for session termination, and `verifyAuth` middleware to protect endpoints like GET/POST `/notes`.
 
 ## 🚀 DB deliverable
 
