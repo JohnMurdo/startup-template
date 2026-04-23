@@ -107,7 +107,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [x] **All functionality implemented or mocked out** - I have a dark mode toggle. However I am still missing some api elements for the reading. I need to make notes and friends local.
+- [x] **All functionality implemented or mocked out** - I have a dark mode toggle. I made functionality for book navigation, making notes, and comment.
 - [x] **Hooks** - I used hooks for my authentification in my login.
 
 ## 🚀 Service deliverable
